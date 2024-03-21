@@ -2,7 +2,7 @@
 -- that computes and store the average score for a student.
 
 DELIMITER //
-CREATE PROCEDURE ComputeAverageScoreForUser(IN user_id INT);
+CREATE PROCEDURE ComputeAverageScoreForUser(IN user_id INT)
 BEGIN
 	DECLARE avg_score DECIMAL(5,2);
 
