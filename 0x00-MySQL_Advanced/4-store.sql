@@ -6,7 +6,7 @@ FOR EACH ROW
 BEGIN
 	UPDATE items
 	SET quantity = quantity - 1
-	WHERE id = NEW.item_id;
+	WHERE item_id = orders.id;
 END;
 //
 DELIMITER ;
