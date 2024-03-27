@@ -4,7 +4,7 @@
 import redis
 import requests
 from typing import Callable
-from functools import wrap
+from functools import wraps
 
 
 def track_url(func: Callable) -> Callable:
