@@ -17,12 +17,12 @@ def replay(func: Callable) -> None:
     r = redis.Redis()
     num_calls = r.get(func.__qualname__).decode("utf-8")
     inpts = [inp.decode("utf-8") for inp in
-             r.lrange(f'{func.__qualname__}:inpts', 0, -1)]
+             r.lrange(f'{func.__qualname__}:inputs', 0, -1)]
     outpts = [outp.decode("utf-8") for outp in
-              r.lrange(f'{func.__qualname__}:outpts', 0, -1)]
+              r.lrange(f'{func.__qualname__}:outputs', 0, -1)]
     print(f'{func.__qualname__} was called {num_calls} times:')
     for inp, outp in zip(inpts, outpts):
-        printf(f'{func.__qualname__}(*{inp}) -> {outp}')
+        print(f'{func.__qualname__}(*{inp}) -> {outp}')
 
 
 def call_history(method: Callable) -> Callable:
