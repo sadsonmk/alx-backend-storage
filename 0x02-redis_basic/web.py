@@ -14,7 +14,7 @@ def track_url(func: Callable) -> Callable:
         """A wrapper function for checking caching of a page and tracking"""
         r = redis.Redis()
         r.incr(f'count:{url}')
-        page = r.get(f'{url}')
+        page = r.get(url)
         if page:
             return page.decode("utf-8")
         result = func(url)
