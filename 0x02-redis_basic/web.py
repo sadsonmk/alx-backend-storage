@@ -11,6 +11,7 @@ def track_url(func: Callable) -> Callable:
     """decorator to track urls for the get_page"""
     @wraps(func)
     def wrapper(url: str) -> str:
+        """A wrapper function for checking caching of a page and tracking"""
         r = redis.Redis()
         r.incr(f'count:{url}')
         page = r.get(f'{url}')
