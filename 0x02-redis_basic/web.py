@@ -31,5 +31,6 @@ def get_page(url: str) -> str:
     response = requests.get(url)
     return response.text
 
+
 url = "http://slowwly.robertomurray.co.uk"
 content = get_page(url)
