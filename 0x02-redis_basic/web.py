@@ -10,7 +10,7 @@ from functools import wraps
 def track_url(func: Callable) -> Callable:
     """decorator to track urls for the get_page"""
     @wraps(func)
-    def wrapper(url: str) -> str:
+    def wrapper(url: str):
         """A wrapper function for checking caching of a page and tracking"""
         key = f"count:{url}"
 
