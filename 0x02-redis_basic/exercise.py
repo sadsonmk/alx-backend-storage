@@ -11,13 +11,28 @@ from typing import Union, Callable, Optional
 from functools import wraps
 
 
+def call_history(method: Callable) -> Callable:
+    """uses rpush to create a list of inputs and outputs"""
+
+    inputs = f'{method.__qualname__}:inputs'
+    outputs = f"{method.__qualname__}:outputs"
+
+    @wraps(method)
+    def wrapper(self, *args):
+        self._redis.rpush(inputs, str(args))
+        output = method(self, *args)
+        self._redis.rpush(outputs, output)
+        return output
+    return wrapper
+
+
 def count_calls(method: Callable) -> Callable:
     """a decorator that counts the number of times a method is called"""
 
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         key = method.__qualname__
-        self.incr(key)
+        self._redis.incr(key)
         return method(self, *args, **kwargs)
     return wrapper
 
@@ -31,10 +46,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
-    def incr(self, key: str):
-        """defines the increment method"""
-        self._redis.incr(key)
-
+    @call_history
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """generate a random key (e.g. using uuid), store
