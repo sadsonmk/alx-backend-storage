@@ -12,13 +12,15 @@ def track_url(func: Callable) -> Callable:
     @wraps(func)
     def wrapper(url: str) -> str:
         """A wrapper function for checking caching of a page and tracking"""
+        key = f"count:{url}"
+
         r = redis.Redis()
-        r.incr(f'count:{url}')
-        page = r.get(url)
+        page = r.get(key)
         if page:
             return page.decode("utf-8")
         result = func(url)
-        r.set(url, result, 10)
+        r.set(key, result, 10)
+        r.incr(f'count:{url}')
         return result
     return wrapper
 
