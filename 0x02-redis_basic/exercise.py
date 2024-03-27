@@ -11,7 +11,7 @@ from typing import Union, Callable, Optional
 from functools import wraps
 
 
-def count_calls(method: Callable[[any], any]) -> Callable[[any], any]:
+def count_calls(method: Callable) -> Callable:
     """a decorator that counts the number of times a method is called"""
 
     @wraps(method)
