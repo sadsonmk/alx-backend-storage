@@ -11,6 +11,20 @@ from typing import Union, Callable, Optional
 from functools import wraps
 
 
+def replay(func: Callable) -> None:
+    """uses keys generated in previous tasks to generate a certain output"""
+
+    r = redis.Redis()
+    num_calls = r.get(func.__qualname__).decode("utf-8")
+    inpts = [inp.decode("utf-8") for inp in
+             r.lrange(f'{func.__qualname__}:inpts', 0, -1)]
+    outpts = [outp.decode("utf-8") for outp in
+              r.lrange(f'{func.__qualname__}:outpts', 0, -1)]
+    print(f'{func.__qualname__} was called {num_calls} times:')
+    for inp, outp in zip(inpts, outpts):
+        printf(f'{func.__qualname__}(*{inp}) -> {outp}')
+
+
 def call_history(method: Callable) -> Callable:
     """uses rpush to create a list of inputs and outputs"""
 
