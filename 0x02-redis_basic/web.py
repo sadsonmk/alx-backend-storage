@@ -19,7 +19,7 @@ def track_url(func: Callable) -> Callable:
         if page:
             return page.decode("utf-8")
         result = func(url)
-        r.set(key, result, 10)
+        r.set(key, result, ex=10)
         r.incr(f'count:{url}')
         return result
     return wrapper
