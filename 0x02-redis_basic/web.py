@@ -18,7 +18,7 @@ def track_url(func: Callable) -> Callable:
         if page:
             return page.decode("utf-8")
         result = func(url)
-        r.set(f'{url}', result, 10)
+        r.set(url, result, 10)
         return result
     return wrapper
 
